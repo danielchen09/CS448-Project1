@@ -12,7 +12,10 @@ public class BufferMgr {
    protected Buffer[] bufferpool;
    protected int numAvailable;
    protected static final long MAX_TIME = 10000; // 10 seconds
-   
+
+   public BufferMgr() {
+
+   }
    /**
     * Creates a buffer manager having the specified number 
     * of buffer slots.

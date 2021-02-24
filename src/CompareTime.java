@@ -22,7 +22,7 @@ public class CompareTime {
     private static boolean[] random; // true for pin, false for unpin
 
     // TODO: enter the name of the new buffer manager below
-    private static final String BUFFERMGR_NEW = "BufferMgrClock";
+    private static final String BUFFERMGR_NEW = "BufferMgrBuffMap";
 
     private static final String SAVE_DIR = "project1out";
     private static final String TEST_DIR = "project1out/tests";

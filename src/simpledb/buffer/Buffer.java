@@ -106,4 +106,13 @@ public class Buffer {
       reference++;
       pins--;
    }
+
+   @Override
+   public String toString() {
+      return "Buffer{" +
+              "blk=" + blk +
+              ", pins=" + pins +
+              ", reference=" + reference +
+              '}';
+   }
 }
