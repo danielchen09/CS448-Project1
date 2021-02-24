@@ -41,7 +41,10 @@ public class BufferMgrBuffMap extends BufferMgr {
 
     @Override
     protected Buffer findExistingBuffer(BlockId blk) {
-        return bufferMap.get(blk);
+        if (bufferMap.containsKey(blk))
+            if (bufferMap.get(blk) != null)
+                return bufferMap.get(blk);
+            return null;
     }
 
     @Override
