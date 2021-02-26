@@ -17,11 +17,16 @@
     - new buffer manager has to `extends BufferMgr`
     
 ## Buffer.java
-- added variable
-    ```java
-    private int reference = 0;
-    ```
-    - used in `BufferMgrClock`
+
+[comment]: <> (- added variable)
+
+[comment]: <> (    ```java)
+
+[comment]: <> (    private int reference = 0;)
+
+[comment]: <> (    ```)
+
+[comment]: <> (    - used in `BufferMgrClock`)
     
 - added method
     ```java 
@@ -39,10 +44,10 @@
 - create a Buffer Manager under `simpledb/buffer`
 - the new buffer should extend `BufferMgr`
 - alter `BUFFERMGR_NEW` to the name of the new buffer manager
-- alter `init` in `main`
-  ```java
-    public static void init(int bufferSize, int numRepeats)
-  ```
+- alter `init` in `main` if necessary
+```java
+  public static void init(int bufferSize, int numRepeats)
+```
 ### methods
 ```java
 public static void runAll(int start, int end, int step)
@@ -67,8 +72,8 @@ public static long[] compareTest(String test)
   - `matplotlib`
   - `numpy`
   - `pandas`
-- alter the filename in `open()` to the testfile to graph
-- alter the title in `graph()`
+  
+- alter `TESTNAME` and `BUFFERMGR` to the one in the test file
 - run the script via
   ```shell
   python graphing.py
