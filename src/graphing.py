@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-FILENAME = "../project1out/tests/_testRandom-BufferMgrBuffMap.txt"
-BUFFERMGR = "BufferMgrBuffMap"
+TESTNAME = "testRandom"
+BUFFERMGR = "BufferMgrClock"
+FILENAME = f"../project1out/tests/_{TESTNAME}-{BUFFERMGR}.txt"
 
 class TestOutput:
     def __init__(self, bufferSize, times):
@@ -42,4 +43,4 @@ while i < len(lines):
     outputs.append(TestOutput(lines[i], lines[i + 1]))
     i += 2
 
-graph(outputs, "test random on " + BUFFERMGR)
+graph(outputs, f"{TESTNAME} on {BUFFERMGR}")
