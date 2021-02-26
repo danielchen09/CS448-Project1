@@ -21,11 +21,14 @@ public class BufferMgrBuffMap extends BufferMgr {
     @Override
     protected Buffer tryToPin(BlockId blk) {
         Buffer buff = findExistingBuffer(blk);
+//        System.out.println(buff);
         if (buff == null) {
             buff = chooseUnpinnedBuffer();
+//            System.out.println(buff);
             if (buff == null)
                 return null;
             if (buff.block() != blk) {
+//                System.out.println(buff.block());
                 bufferMap.remove(buff.block());
             }
             buff.assignToBlock(blk);
@@ -49,6 +52,7 @@ public class BufferMgrBuffMap extends BufferMgr {
 
     @Override
     protected Buffer chooseUnpinnedBuffer() {
+//        System.out.println("size" + unpinnedBlocks.size());
         if (unpinnedBlocks.size() > 0) {
             return unpinnedBlocks.remove(0);
         }

@@ -18,37 +18,64 @@ public class BufferMgrHashTable extends BufferMgr{
     * @param numbuffs the number of buffer slots to allocate
     */
 
-   private HashMap<BlockId, Integer> buffHash;
+   private HashMap<BlockId, Integer> buffHash = new HashMap<>();
 
    public BufferMgrHashTable(FileMgr fm, LogMgr lm, int numbuffs) {
       super(fm, lm, numbuffs);
-      bufferpool = new Buffer[numbuffs];
-      buffHash = new HashMap<>(numbuffs);
-      for(int i = 0; i < numbuffs; i++){
-         bufferpool[i] = new Buffer(fm, lm);
-         //at the same time when we put buffer into bufferpool, we store key value pair into the hashmap
-         buffHash.put(bufferpool[i].block(), i);
-      }
    }
 
    //implement a hash table for the bufferpool, make searching in bufferpool quicker
    //key that maps to a buffer, key - BlockId, value - index in the bufferpool
 
-   protected Buffer findExistingBuffer(BlockId blk){
-      //getting the index of bufferpool through buffHash.get(blk)
-      //get put the value (index) to get to certain place in the array
-      if (buffHash.get(blk) == null || blk == null){
-         return null;
+   @Override
+   protected Buffer tryToPin(BlockId blk) {
+      int index = findExistingBuffer2(blk);
+      Buffer buff = null;
+      if (index == -1) { //if it doesn't contain the key
+         index = chooseUnpinnedBuffer2();
+         if (index == -1) { //not found
+            return null;
+         }
+         //unpinned index
+         buff = bufferpool[index];
+         if (buff.block() != blk) {
+            buffHash.remove(buff.block());
+         }
+         buff.assignToBlock(blk);
+         buffHash.put(blk, index);
       }
-      return bufferpool[buffHash.get(blk)];
+      else {
+         buff = bufferpool[index];
+      }
+      if (!buff.isPinned()) {
+         numAvailable--;
+      }
+      buff.pin();
+      return buff;
    }
 
-//   protected Buffer chooseUnpinnedBuffer(){
-//      for (Integer i: buffHash.values()){
-//         if(!bufferpool[i].isPinned()){
-//            return bufferpool[i];
-//         }
-//      }
-//      return null;
-//   }
+   protected int findExistingBuffer2(BlockId blk) {
+      if (!buffHash.containsKey(blk)) {
+         return -1;
+      }
+      return buffHash.get(blk);
+   }
+
+   protected int chooseUnpinnedBuffer2() {
+      for (int i = 0; i < bufferpool.length; i++) {
+         if (!bufferpool[i].isPinned()) { //isPinned is true when the buffer is currently pinned
+            return i;
+         }
+      }
+      return -1;
+   }
+
+   @Override
+   public synchronized void unpin(Buffer buff) {
+      buff.unpin();
+      if (!buff.isPinned()) {
+         numAvailable++;
+         notifyAll();
+      }
+   }
 }
